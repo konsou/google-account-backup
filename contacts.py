@@ -35,7 +35,7 @@ VALID_PERSON_FIELDS = (
 
 
 def save_contacts(contacts):
-    with open('contacts_backup.json', 'w') as file:
+    with open('contacts_backup.json', 'w', encoding='utf-8') as file:
         json.dump(contacts, file, indent=4)
 
 
