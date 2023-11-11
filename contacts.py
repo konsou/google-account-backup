@@ -40,8 +40,16 @@ def save_contacts(contacts):
 
 
 def get_contacts(service):
-    results = service.people().connections().list(
-        resourceName='people/me',
-        pageSize=1000,
-        personFields=','.join(VALID_PERSON_FIELDS)).execute()
-    return results.get('connections', [])
+    page_token = None
+    contacts = []
+    while True:
+        results = service.people().connections().list(
+            resourceName='people/me',
+            pageSize=1000,
+            pageToken=page_token,
+            personFields=','.join(VALID_PERSON_FIELDS)).execute()
+        contacts.extend(results.get('connections', []))
+        page_token = results.get('nextPageToken', None)
+        if page_token is None:
+            break
+    return contacts
